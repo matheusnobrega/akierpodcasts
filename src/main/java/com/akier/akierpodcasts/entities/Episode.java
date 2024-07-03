@@ -3,31 +3,33 @@ package com.akier.akierpodcasts.entities;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
-@Entity
-@Table(name = "podcasts")
-public class Podcast {
+public class Episode {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "podcast_id", nullable = false)
+    private Podcast podcast;
+
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private String description;
 
-    @Column(nullable = false)
-    private String rssFeedUrl;
+    @Column(name = "audio_url", nullable = false)
+    private String audioUrl;
 
-    @Column(name = "cover_image")
-    private String coverImage;
+    @Column(name = "published_at", nullable = false)
+    private LocalDateTime publishedAt;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
@@ -41,6 +43,14 @@ public class Podcast {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Podcast getPodcast() {
+        return podcast;
+    }
+
+    public void setPodcast(Podcast podcast) {
+        this.podcast = podcast;
     }
 
     public String getTitle() {
@@ -59,12 +69,20 @@ public class Podcast {
         this.description = description;
     }
 
-    public String getrssFeedUrl() {
-        return rssFeedUrl;
+    public String getAudioUrl() {
+        return audioUrl;
     }
 
-    public void setrssFeedUrl(String rssFeedUrl) {
-        this.rssFeedUrl = rssFeedUrl;
+    public void setAudioUrl(String audioUrl) {
+        this.audioUrl = audioUrl;
+    }
+
+    public LocalDateTime getPublishedAt() {
+        return publishedAt;
+    }
+
+    public void setPublishedAt(LocalDateTime publishedAt) {
+        this.publishedAt = publishedAt;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -82,6 +100,6 @@ public class Podcast {
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
-
+    
     
 }
