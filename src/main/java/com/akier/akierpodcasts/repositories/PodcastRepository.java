@@ -8,5 +8,6 @@ import com.akier.akierpodcasts.entities.Podcast;
 
 public interface PodcastRepository extends JpaRepository<Podcast, Long>{
     Optional<Podcast> findByName(String name);
+    Podcast findByRssFeedUrl(String urlFeedUrl);
 
 }
