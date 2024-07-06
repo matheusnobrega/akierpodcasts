@@ -1,5 +1,6 @@
 package com.akier.akierpodcasts.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,10 @@ public class PodcastService {
 
     public Optional<Podcast> findByName(String name) {
         return podcastRepository.findByName(name);
+    }
+
+    public List<Podcast> findAll() {
+        return podcastRepository.findAll();
     }
 
 }
