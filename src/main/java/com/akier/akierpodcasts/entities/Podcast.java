@@ -18,7 +18,7 @@ public class Podcast {
     private Long id;
 
     @Column(nullable = false)
-    private String title;
+    private String name;
 
     @Column(nullable = true)
     private String description;
@@ -43,12 +43,12 @@ public class Podcast {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {
