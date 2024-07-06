@@ -21,7 +21,7 @@ public class ScheduledTasks {
     public void updateAllPodcasts() {
         List<Podcast> podcasts = podcastRepository.findAll();
         for (Podcast podcast : podcasts) {
-            episodeService.saveEpisodeRss(podcast.getrssFeedUrl());
+            episodeService.saveEpisodeRss(podcast.getRssFeedUrl());
         }
     }
 }

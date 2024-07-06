@@ -59,11 +59,11 @@ public class Podcast {
         this.description = description;
     }
 
-    public String getrssFeedUrl() {
+    public String getRssFeedUrl() {
         return rssFeedUrl;
     }
 
-    public void setrssFeedUrl(String rssFeedUrl) {
+    public void setRssFeedUrl(String rssFeedUrl) {
         this.rssFeedUrl = rssFeedUrl;
     }
 

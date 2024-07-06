@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.akier.akierpodcasts.entities.Podcast;
 import com.akier.akierpodcasts.service.PodcastService;
 
+
 @RestController
 @RequestMapping("/api/podcasts")
 public class PodcastController {
@@ -22,9 +23,12 @@ public class PodcastController {
     @Autowired
     private PodcastService podcastService;
 
+ 
+
     @PostMapping
     public ResponseEntity<Podcast> createPodcast(@RequestBody Podcast podcast) {
         Podcast savedPodcast = podcastService.savePodcast(podcast);
+        
         return ResponseEntity.ok(savedPodcast);
     }
 
