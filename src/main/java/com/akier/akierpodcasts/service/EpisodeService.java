@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
@@ -43,8 +44,7 @@ public class EpisodeService {
 
     public void saveEpisodeRss(String urlRss) {
         String rssContent = restTemplate.getForObject(urlRss, String.class);
-
-        List<Episode> episodes = parseRss(rssContent);
+        List<Episode> episodes = parseRss(rssContent, urlRss);
 
         for (Episode episode : episodes) {
             if (!episodeRepository.findByPodcastIdAndTitle(episode.getPodcast().getId(), episode.getTitle()).isPresent()) {
@@ -53,7 +53,7 @@ public class EpisodeService {
         }
     }
     
-    public List<Episode> parseRss(String rssContent) {
+    public List<Episode> parseRss(String rssContent, String urlRss) {
         List<Episode> episodes = new ArrayList<>();
 
         try {
@@ -62,20 +62,31 @@ public class EpisodeService {
             Document doc = builder.parse(new InputSource(new StringReader(rssContent)));
 
             NodeList itemNodes = doc.getElementsByTagName("item");
+
             for (int i = 0; i < itemNodes.getLength(); i++) {
-                String title = doc.getElementsByTagName("title").item(i).getTextContent();
-                String description = doc.getElementsByTagName("description").item(i).getTextContent();
-                String audioUrl = doc.getElementsByTagName("enclosure").item(i).getAttributes().getNamedItem("url").getTextContent();
-                String pubDate = doc.getElementsByTagName("pubDate").item(i).getTextContent();
+                Element itemElement = (Element) itemNodes.item(i);
+
+                String title = getElementTextContent(itemElement, "title");
+                String description = getElementTextContent(itemElement, "description");
+                String audioUrl = getElementTextContent(itemElement, "enclosure", "url");
+                String pubDate = getElementTextContent(itemElement, "pubDate");
+
+                // String title = doc.getElementsByTagName("title").item(i).getTextContent();
+                // String description = doc.getElementsByTagName("description").item(i).getTextContent();
+                // String audioUrl = doc.getElementsByTagName("enclosure").item(i).getAttributes().getNamedItem("url").getTextContent();
+                // String pubDate = doc.getElementsByTagName("pubDate").item(i).getTextContent();
+                
                 LocalDateTime publishedAt = LocalDateTime.parse(pubDate, DateTimeFormatter.RFC_1123_DATE_TIME);
+                LocalDateTime createdAt = LocalDateTime.now();
 
                 Episode episode = new Episode();
                 episode.setTitle(title);
                 episode.setDescription(description);
                 episode.setAudioUrl(audioUrl);
                 episode.setPublishedAt(publishedAt);
+                episode.setCreatedAt(createdAt);
 
-                Podcast podcast = podcastRepository.findByRssFeedUrl(rssContent);
+                Podcast podcast = podcastRepository.findByRssFeedUrl(urlRss);
 
                 if (podcast != null) {
                     episode.setPodcast(podcast);
@@ -87,5 +98,22 @@ public class EpisodeService {
             e.printStackTrace();
         }
         return episodes;
+    }
+
+
+    private String getElementTextContent(Element parent, String tagName) {
+        NodeList nodes = parent.getElementsByTagName(tagName);
+        if (nodes.getLength() > 0) {
+            return nodes.item(0).getTextContent();
+        }
+        return null;
+    }
+    
+    private String getElementTextContent(Element parent, String tagName, String attributeName) {
+        NodeList nodes = parent.getElementsByTagName(tagName);
+        if (nodes.getLength() > 0) {
+            return nodes.item(0).getAttributes().getNamedItem(attributeName).getTextContent();
+        }
+        return null;
     }
 }

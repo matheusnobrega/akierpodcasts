@@ -26,7 +26,7 @@ public class Podcast {
     @Column(nullable = false)
     private String rssFeedUrl;
 
-    @Column(name = "cover_image")
+    @Column(name = "cover_image", length = 1000)
     private String coverImage;
 
     @Column(name = "created_at", nullable = false)

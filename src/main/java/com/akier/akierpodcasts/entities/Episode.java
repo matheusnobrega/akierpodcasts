@@ -23,13 +23,13 @@ public class Episode {
     @JoinColumn(name = "podcast_id", nullable = false)
     private Podcast podcast;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 500)
     private String title;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 10000)
     private String description;
 
-    @Column(name = "audio_url", nullable = false)
+    @Column(name = "audio_url", nullable = false, length = 1000)
     private String audioUrl;
 
     @Column(name = "published_at", nullable = false)
