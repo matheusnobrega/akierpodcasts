@@ -13,7 +13,7 @@ Esta aplicação é responsável por analisar um feed RSS de podcasts e armazena
 - Java
 - Spring Boot
 - Spring Data JPA
-- H2 Database (para desenvolvimento/testes, pode ser substituído por outro banco de dados relacional em produção)
+- Postgres
 - XML (para parsing do feed RSS)
 
 ## Estrutura do Projeto
